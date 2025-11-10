@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>M42 Creations</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+        <div id="header"></div>
+        <script src="scripts/load-header.js"></script>
+        
+        <div id="page-contents" class="wide">
+            <div id="title">
+                <h1>Boids</h1>
+            </div>
+            
+            <div>
+                <p>In 1986, Craig Reynolds developed <a href="https://www.red3d.com/cwr/boids/">the original Boids model</a> to simulate the coordinated motion of animals like birds or fish. What you see below is my implementation of Reynolds's model using C# in the Unity game engine.</p>
+            </div>
+            
+            <div id="unity-container" class="unity-desktop">
+                <canvas id="unity-canvas" tabindex="-1"></canvas>
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                    </div>
+                </div>
+                <div id="unity-warning"> </div>
+            </div>
+            <script>
+                var canvas = document.querySelector("#unity-canvas");
+            
+                var heightRatio = 0.57;
+                canvas.height = canvas.width * heightRatio;
+            
+                // Shows a temporary message banner/ribbon for a few seconds, or
+                // a permanent error message on top of the canvas if type=='error'.
+                // If type=='warning', a yellow highlight color is used.
+                // Modify or remove this function to customize the visually presented
+                // way that non-critical warnings and error messages are presented to the
+                // user.
+                function unityShowBanner(msg, type) {
+                    var warningBanner = document.querySelector("#unity-warning");
+                    function updateBannerVisibility() {
+                        warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+                    }
+                    var div = document.createElement('div');
+                    div.innerHTML = msg;
+                    warningBanner.appendChild(div);
+                    if (type == 'error') div.style = 'background: red; padding: 10px;';
+                    else {
+                        if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+                        setTimeout(function() {
+                            warningBanner.removeChild(div);
+                            updateBannerVisibility();
+                        }, 5000);
+                    }
+                    updateBannerVisibility();
+                }
+            
+                var buildUrl = "boids/Build";
+                var loaderUrl = buildUrl + "/v0.1.0.loader.js";
+                var config = {
+                    arguments: [],
+                    dataUrl: buildUrl + "/v0.1.0.data",
+                    frameworkUrl: buildUrl + "/v0.1.0.framework.js",
+                    codeUrl: buildUrl + "/v0.1.0.wasm",
+                    streamingAssetsUrl: "StreamingAssets",
+                    companyName: "M42 Creations",
+                    productName: "Boids 2.0",
+                    productVersion: "0.1.0",
+                    showBanner: unityShowBanner,
+                };
+            
+                // By default, Unity keeps WebGL canvas render target size matched with
+                // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+                // Set this to false if you want to decouple this synchronization from
+                // happening inside the engine, and you would instead like to size up
+                // the canvas DOM size and WebGL render target sizes yourself.
+                // config.matchWebGLToCanvasSize = false;
+            
+                // If you would like all file writes inside Unity Application.persistentDataPath
+                // directory to automatically persist so that the contents are remembered when
+                // the user revisits the site the next time, uncomment the following line:
+                // config.autoSyncPersistentDataPath = true;
+                // This autosyncing is currently not the default behavior to avoid regressing
+                // existing user projects that might rely on the earlier manual
+                // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+                // expected to change.
+            
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                    // Mobile device style: fill the whole browser client area with the game canvas:
+            
+                    var meta = document.createElement('meta');
+                    meta.name = 'viewport';
+                    meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+                    document.getElementsByTagName('head')[0].appendChild(meta);
+                    document.querySelector("#unity-container").className = "unity-mobile";
+                    canvas.className = "unity-mobile";
+            
+                    // To lower canvas resolution on mobile devices to gain some
+                    // performance, uncomment the following line:
+                    // config.devicePixelRatio = 1;
+            
+            
+                }
+            
+                document.querySelector("#unity-loading-bar").style.display = "block";
+            
+                var script = document.createElement("script");
+                script.src = loaderUrl;
+                script.onload = () => {
+                    createUnityInstance(canvas, config, (progress) => {
+                        document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+                    }).then((unityInstance) => {
+                        document.querySelector("#unity-loading-bar").style.display = "none";
+            
+                    }).catch((message) => {
+                        alert(message);
+                    });
+                };
+            
+                document.body.appendChild(script);
+            </script>
+            
+            <div style="text-align: left">
+                <h2>What Are Boids?</h2>
+                <p>Each triangle you see above is a single boid. A boid represents an individual entity like a bird or fish. Each individual boid follows three basic rules from Reynolds's original model:</p>
+                <ol>
+                    <li><b>Separation</b>: Steer to avoid colliding with or overcrowding other nearby boids</li>
+                    <li><b>Alignment</b>: Steer toward the average heading of the nearest boids</li>
+                    <li><b>Cohesion</b>: Steer toward the average center of the nearest boids</li>
+                </ol>
+                <p></p>
+                <p>In addition to the original three rules, I've added an edge avoidance rule to keep the simulation contained.</p>
+                <h2>Emergent Behavior</h2>
+                <p>The code for this simulation does not explicitly tell the group of boids, "move together in a flock". The code only tells each boid how to behave individually, and they begin to flock as a result! This is emergent behavior.</p>
+                <p>The Boids simulation is a great, approachable introduction to emergent behavior. Since there are only three quite simple rules, it's easy to see how they can combine to produce flocking movement. If you make a leap of intuition, you can begin to understand how something even more complex - like life itself - can emerge from the fundamental rules of physics and chemistry. When inert material follows simple rules in complex ways, life can appear.</p>
+                <!--<h2>Implementation</h2>-->
+                <p></p>
+            </div>
+        </div>
+    </body>
+</html>
