@@ -9,7 +9,6 @@ body {
     /*justify-content: center;*/
     /*height: 100vh;*/
     flex-direction: column;
-    text-align: center;
 }
 h1 {
     font-size: 3em;
@@ -64,13 +63,13 @@ a:hover, a:active {
     color: #e6e6e6;
 }
 
-#page-contents {
+.page-content {
     margin: 10px;
 }
-#page-contents.wide {
+.page-content.wide {
     max-width: 50em;
 }
-#page-contents.narrow {
+.page-content.narrow {
     max-width: 40em;
 }
 
@@ -81,3 +80,11 @@ a:hover, a:active {
 /*#unity-container {*/
 /*    width: 90%*/
 /*}*/
+
+.centered {
+    text-align: center;
+}
+
+.small-text {
+    font-size: 0.8em;
+}
