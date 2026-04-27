@@ -4,6 +4,7 @@ const { marked } = require("marked");
 const config = {
     templatePath: "templates/",
     pageMarkdownPath: "pages/",
+    distPath: "../dist/",
     baseTemplateName: "base-html-template"
 };
 
@@ -40,5 +41,5 @@ function renderPage(pageName) {
     return renderTemplate(loadTemplate(config.baseTemplateName), page);
 }
 
-fs.writeFileSync("dist/index.html", renderPage("about"));
-fs.copyFileSync("styles.css", "dist/styles.css");
+fs.writeFileSync(`${config.distPath}index.html`, renderPage("about"));
+fs.copyFileSync("styles.css", `${config.distPath}styles.css`);
