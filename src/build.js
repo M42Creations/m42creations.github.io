@@ -29,14 +29,40 @@ function renderPage(pageName, page) {
     return renderTemplate(loadTemplate(config.baseTemplateName), page);
 }
 
+function generateNavHeader(pages) {
+    let html = "<nav>";
+
+    let first = true;
+    for (const [pageName, page] of Object.entries(pages)) {
+        if (!first) {
+            html += " | ";
+        }
+        let path = `${pageName}.html`
+        if (page["isIndex"]){
+            path = "index.html"
+        }
+        html += `<a href="${path}">${page.title}</a>`;
+        first = false;
+    }
+
+    html += "</nav><hr>";
+
+    return html;
+}
+
 function build() {
     const pages = require(`./${config.pagesPath}pages.json`);
-
+    
+    // Generate the navigation header
+    const navHeaderHtml = generateNavHeader(pages)
+    
     for (const [pageName, page] of Object.entries(pages)) {
         let htmlName = `${pageName}.html`
         if (page["isIndex"]) {
             htmlName = "index.html"
         }
+        page["navHeader"] = navHeaderHtml;
+        
         fs.writeFileSync(`${config.distPath}${htmlName}`, renderPage(pageName, page));
     }
     
