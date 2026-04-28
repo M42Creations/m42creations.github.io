@@ -14,3 +14,29 @@ body {
     margin: 0 auto;
     padding: 24px;
 }
+
+#nav-header {
+    margin: 0;
+    font-size: 1.2rem;
+    text-align: left;
+    padding: 0;
+}
+#nav-header hr {
+    border: 0;
+    border-top: 2px solid #969696;
+    height: 0;
+    margin: 10px 0;
+}
+#nav-header a {
+    text-decoration: none;
+    color: #969696;
+}
+#nav-header a:visited {
+
+}
+#nav-header a:hover {
+    color: #c8c8c8;
+}
+#nav-header a:active {
+    color: #e6e6e6;
+}
