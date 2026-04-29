@@ -1,7 +1,8 @@
 # Boids
-In 1986, Craig Reynolds developed [the original Boids model](https://www.red3d.com/cwr/boids/) to simulate the coordinated motion of animals like birds or fish. What you see below is my implementation of Reynolds's model using C# in the Unity game engine.
 
 {{unity:boids}}
+
+In 1986, Craig Reynolds developed [the original Boids model](https://www.red3d.com/cwr/boids/) to simulate the coordinated motion of animals like birds or fish. What you see below is my implementation of Reynolds's model using C# in the Unity game engine.
 
 ### What Are Boids?
 Each triangle you see above is a single boid. A boid represents an individual entity like a bird or fish. Each individual boid follows three basic rules from Reynolds's original model:
