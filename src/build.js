@@ -3,23 +3,24 @@ const { marked } = require("marked");
 const path = require("path");
 
 const config = {
-    templatePath: "templates/",
-    pagesPath: "pages/",
-    distPath: "../dist/",
-    componentPath: "components/",
+    templatePath: path.resolve(__dirname, "templates/"),
+    pagesPath: path.resolve(__dirname, "pages/"),
+    distPath: path.resolve(__dirname, "../dist/"),
+    componentPath: path.resolve(__dirname, "components/"),
     baseTemplateName: "base-html-template"
 };
 
+
 function loadPageMarkdown(pageName) {
-    return fs.readFileSync(`${config.pagesPath}${pageName}.md`, "utf8");
+    return fs.readFileSync(path.join(config.pagesPath,`${pageName}.md`), "utf8");
 }
 
 function loadTemplate(name) {
-    return fs.readFileSync(`${config.templatePath}${name}.html`, "utf-8");
+    return fs.readFileSync(path.join(config.templatePath,`${name}.html`), "utf-8");
 }
 
 function loadUnityContainer(name) {
-    const html = fs.readFileSync(`${config.componentPath}unity-container.html`, "utf-8");
+    const html = fs.readFileSync(path.join(config.componentPath,`unity-container.html`), "utf-8");
     return html.replace(/{{name}}/g, name);
 }
 
@@ -65,7 +66,7 @@ function generateNavHeader(pages) {
 }
 
 function build() {
-    const pages = require(`./${config.pagesPath}pages.json`);
+    const pages = require(path.join(config.pagesPath,"pages.json"));
     
     // Generate the navigation header
     const navHeaderHtml = generateNavHeader(pages)
@@ -77,11 +78,11 @@ function build() {
         }
         page["navHeader"] = navHeaderHtml;
         
-        fs.writeFileSync(`${config.distPath}${htmlName}`, renderPage(pageName, page));
+        fs.writeFileSync(path.join(config.distPath, htmlName), renderPage(pageName, page));
     }
     
-    fs.copyFileSync("styles.css", `${config.distPath}styles.css`);
-    fs.cpSync("./unity", `${config.distPath}unity`, { recursive: true });
+    fs.copyFileSync(path.resolve(__dirname, "styles.css"), path.join(config.distPath, "styles.css"));
+    fs.cpSync(path.resolve(__dirname, "./unity"), path.join(config.distPath, "unity"), { recursive: true });
 }
 
 build()
