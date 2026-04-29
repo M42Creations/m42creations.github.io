@@ -18,4 +18,9 @@ PORT = 8000
 
 with TCPServer(("", PORT), NoCacheHandler) as httpd:
     print(f"Serving at http://localhost:{PORT}")
-    httpd.serve_forever()
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("Received KeyboardInterrupt - Shutting Down")
+    finally:
+        httpd.server_close()
