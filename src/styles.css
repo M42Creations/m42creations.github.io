@@ -63,3 +63,13 @@ a:hover, a:active {
 #nav-header a:active {
     color: #e6e6e6;
 }
+
+.unity-container {
+    width: 100%;
+}
+.unity-frame {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    display: block;
+}

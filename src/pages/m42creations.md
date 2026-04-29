@@ -5,3 +5,4 @@ I'm a curious software engineer with a passion for understanding how things work
 
 This site features my favorite personal projects! My goal is to simply share what excites me, in the hope that it might spark curiosity or inspire others. I'd love to connect with other curious minds as well - feel free to [reach out](contact.html)!
 
+{{unity:boids}}

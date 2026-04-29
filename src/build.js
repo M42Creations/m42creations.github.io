@@ -6,6 +6,7 @@ const config = {
     templatePath: "templates/",
     pagesPath: "pages/",
     distPath: "../dist/",
+    componentPath: "components/",
     baseTemplateName: "base-html-template"
 };
 
@@ -17,14 +18,27 @@ function loadTemplate(name) {
     return fs.readFileSync(`${config.templatePath}${name}.html`, "utf-8");
 }
 
+function loadUnityContainer(name) {
+    const html = fs.readFileSync(`${config.componentPath}unity-container.html`, "utf-8");
+    return html.replace(/{{name}}/g, name);
+}
+
 function renderTemplate(template, data) {
     return template.replace(/{{(.*?)}}/g, (_, key) => data[key.trim()]);
+}
+
+function applyUnityComponents(content) {
+    return content.replace(/{{unity:([\w-]+)}}/g, (_, name) => {
+        return loadUnityContainer(name) || "";
+    });
 }
 
 function renderPage(pageName, page) {
     // Translate page markdown to HTML
     const pageMarkdown = loadPageMarkdown(pageName);
     page["renderedContent"] = marked.parse(pageMarkdown);
+    
+    page["renderedContent"] = applyUnityComponents(page["renderedContent"]);
     
     return renderTemplate(loadTemplate(config.baseTemplateName), page);
 }
@@ -66,7 +80,8 @@ function build() {
         fs.writeFileSync(`${config.distPath}${htmlName}`, renderPage(pageName, page));
     }
     
-    fs.copyFileSync("styles.css", `${config.distPath}styles.css`); 
+    fs.copyFileSync("styles.css", `${config.distPath}styles.css`);
+    fs.cpSync("./unity", `${config.distPath}unity`, { recursive: true });
 }
 
 build()
