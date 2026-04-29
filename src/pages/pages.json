@@ -3,8 +3,8 @@
     "title": "M42 Creations",
     "isIndex": true
   },
-  "about": {
-    "title": "About"
+  "boids": {
+    "title": "Boids"
   },
   "contact": {
     "title": "Contact"
