@@ -10,6 +10,12 @@ const config = {
     baseTemplateName: "base-html-template"
 };
 
+// Throw error is dist directory is not in this project folder
+// Safeguards against deleting/manipulating incorrect file locations 
+if (!config.distPath.startsWith(path.resolve(__dirname, ".."))) {
+    throw new Error("Unsafe dist path blocked");
+}
+
 
 function loadPageMarkdown(pageName) {
     return fs.readFileSync(path.join(config.pagesPath,`${pageName}.md`), "utf8");
@@ -66,6 +72,12 @@ function generateNavHeader(pages) {
 }
 
 function build() {
+    // Delete existing dist directory and recreate
+    if (fs.existsSync(config.distPath)) {
+        fs.rmSync(config.distPath, {recursive: true, force: true});
+    }
+    fs.mkdirSync(config.distPath, { recursive: true });
+    
     const pages = require(path.join(config.pagesPath,"pages.json"));
     
     // Generate the navigation header
