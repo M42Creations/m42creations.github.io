@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Boids 2.0</title>
+    <title>Unity Web Player | Boids</title>
   </head>
   <body style="margin:0; overflow:hidden;">
     <canvas id="unity-canvas" tabindex="-1" style="width: 100vw; height: 100vh; object-fit: contain; display: block; background: #231F20"></canvas>
-    <script src="Build/v0.1.0-webgl.loader.js"></script>
+    <script src="Build/v0.2.0-webgl.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -26,13 +26,13 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/v0.1.0-webgl.data",
-        frameworkUrl: "Build/v0.1.0-webgl.framework.js",
-        codeUrl: "Build/v0.1.0-webgl.wasm",
+        dataUrl: "Build/v0.2.0-webgl.data",
+        frameworkUrl: "Build/v0.2.0-webgl.framework.js",
+        codeUrl: "Build/v0.2.0-webgl.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "M42 Creations",
-        productName: "Boids 2.0",
-        productVersion: "0.1.0",
+        productName: "Boids",
+        productVersion: "0.2.0",
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
