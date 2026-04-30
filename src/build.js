@@ -5,14 +5,14 @@ const path = require("path");
 const config = {
     templatePath: path.resolve(__dirname, "templates/"),
     pagesPath: path.resolve(__dirname, "pages/"),
-    distPath: path.resolve(__dirname, "../dist/"),
+    siteOutputPath: path.resolve(__dirname, "../docs/"),
     componentPath: path.resolve(__dirname, "components/"),
     baseTemplateName: "base-html-template"
 };
 
 // Throw error is dist directory is not in this project folder
 // Safeguards against deleting/manipulating incorrect file locations 
-if (!config.distPath.startsWith(path.resolve(__dirname, ".."))) {
+if (!config.siteOutputPath.startsWith(path.resolve(__dirname, ".."))) {
     throw new Error("Unsafe dist path blocked");
 }
 
@@ -73,10 +73,10 @@ function generateNavHeader(pages) {
 
 function build() {
     // Delete existing dist directory and recreate
-    if (fs.existsSync(config.distPath)) {
-        fs.rmSync(config.distPath, {recursive: true, force: true});
+    if (fs.existsSync(config.siteOutputPath)) {
+        fs.rmSync(config.siteOutputPath, {recursive: true, force: true});
     }
-    fs.mkdirSync(config.distPath, { recursive: true });
+    fs.mkdirSync(config.siteOutputPath, { recursive: true });
     
     const pages = require(path.join(config.pagesPath,"pages.json"));
     
@@ -90,11 +90,11 @@ function build() {
         }
         page["navHeader"] = navHeaderHtml;
         
-        fs.writeFileSync(path.join(config.distPath, htmlName), renderPage(pageName, page));
+        fs.writeFileSync(path.join(config.siteOutputPath, htmlName), renderPage(pageName, page));
     }
     
-    fs.copyFileSync(path.resolve(__dirname, "styles.css"), path.join(config.distPath, "styles.css"));
-    fs.cpSync(path.resolve(__dirname, "./unity"), path.join(config.distPath, "unity"), { recursive: true });
+    fs.copyFileSync(path.resolve(__dirname, "styles.css"), path.join(config.siteOutputPath, "styles.css"));
+    fs.cpSync(path.resolve(__dirname, "./unity"), path.join(config.siteOutputPath, "unity"), { recursive: true });
 }
 
 build()
