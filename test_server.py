@@ -16,7 +16,10 @@ class NoCacheHandler(SimpleHTTPRequestHandler):
 
 PORT = 8000
 
-with TCPServer(("", PORT), NoCacheHandler) as httpd:
+class ReusableTCPServer(TCPServer):
+    allow_reuse_address = True
+
+with ReusableTCPServer(("", PORT), NoCacheHandler) as httpd:
     print(f"Serving at http://localhost:{PORT}")
     try:
         httpd.serve_forever()
